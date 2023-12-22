@@ -19,8 +19,9 @@ namespace ToShareApı.Controllers
 
         //Add Post
         [HttpPost("[action]")]
-        public async Task<IActionResult> AddPosts(int userId, [FromBody] Post posts)
+        public async Task<IActionResult> AddPosts(int userId,int productID, [FromBody] Post posts)
         {
+            posts.ProductId = productID;
             posts.UserId = userId;
             _ApiDbContext.Posts.Add(posts);
             await _ApiDbContext.SaveChangesAsync();
@@ -28,13 +29,47 @@ namespace ToShareApı.Controllers
             return Ok(posts);
         }
 
-        //List by UserId
+        //Add Post
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddPosts2(int userId, int productID, [FromBody] Post posts)
+        {
+            var newPost = new Post
+            {
+                ProductId = userId,
+                UserId = productID
+            };
+            _ApiDbContext.Posts.Add(newPost);
+            await _ApiDbContext.SaveChangesAsync();
+            return Ok(newPost);
+        }
+
+            //List by UserId
         [HttpGet("[action]")]
         public async Task<IActionResult> GetPostsByUserId(int userId)
         {
             var posts = await _ApiDbContext.Posts.Where(x => x.UserId == userId).ToListAsync();
             return Ok(posts);
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var category = await _ApiDbContext.Category.ToListAsync();
+            return Ok(category);
+        }
+
+        //List All post
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetActivePosts()
+        {
+            DateTime currenttime = DateTime.Now;
+            var activePosts = await _ApiDbContext.Posts
+                .Where(x => x.EndTime > currenttime)
+                .ToListAsync();
+
+            return Ok(activePosts);
+        }
+
 
     }
 }
