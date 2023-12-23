@@ -71,6 +71,45 @@ namespace ToShareApı.Controllers
         }
 
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ApplyPost(int postId, int userId)
+        {
+            try
+            {
+                // Başvuruyu oluştur
+                var apply = new Apply
+                {
+                    PostId = postId,
+                    UserId = userId,
+                    ApplyTime = DateTime.Now,
+                    IsActive = true,
+                    IsAproved = false
+                };
+
+                // Apply'yi veritabanına ekle
+                _ApiDbContext.Apply.Add(apply);
+                await _ApiDbContext.SaveChangesAsync();
+
+                // Başvuruyu kullanıcının Apply listesine ekleyin
+                var user = await _ApiDbContext.Users.Include(u => u.Applies).FirstOrDefaultAsync(u => u.Id == userId);
+                if (user != null)
+                {
+                    if (user.Applies == null)
+                        user.Applies = new List<Apply>();
+
+                    user.Applies.Add(apply);
+                    await _ApiDbContext.SaveChangesAsync();
+                }
+
+                return Ok(apply);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Başvuru işlemi sırasında bir hata oluştu: {ex.Message}");
+            }
+        }
+
+
     }
 }
 
