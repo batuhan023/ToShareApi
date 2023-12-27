@@ -52,11 +52,33 @@ namespace ToShareApı.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> GetPostsByCategoryId(int categoryId)
+        {
+            var posts = await _ApiDbContext.Posts.Where(x => x.CategoryId == categoryId).ToListAsync();
+            return Ok(posts);
+        }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetCategories()
         {
             var category = await _ApiDbContext.Category.ToListAsync();
             return Ok(category);
         }
+
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetCategoryById(int id)
+        {
+            var category = await _ApiDbContext.Posts.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
+        }
+
 
         //List All post
         [HttpGet("[action]")]
