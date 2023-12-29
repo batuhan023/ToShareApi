@@ -59,6 +59,13 @@ namespace ToShareApı.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> GetPostsByPostId(int postId)
+        {
+            var posts = await _ApiDbContext.Posts.FirstOrDefaultAsync(x => x.Id == postId);
+            return Ok(posts);
+        }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetCategories()
         {
             var category = await _ApiDbContext.Category.ToListAsync();
