@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToShareApı.Data;
 using ToShareApı.Models;
+using ToShareApı.Service;
 
 namespace ToShareApı.Controllers
 {
@@ -11,11 +12,31 @@ namespace ToShareApı.Controllers
     public class PostsController : ControllerBase
     {
         private ApiDbContext _ApiDbContext;
+        //private readonly PostService _postService;
 
         public PostsController(ApiDbContext apiDbContext)
         {
+           
             _ApiDbContext = apiDbContext;
+            //_postService = postService;
         }
+
+
+        //[HttpPost("approveapplications/{postId}")]
+        //public IActionResult ApproveApplications(int postId)
+        //{
+        //    _applyService.ApproveApplications(postId);
+        //    return Ok("Applications approved successfully");
+        //}
+
+
+        //[HttpGet("updatestatus")]
+        //public IActionResult UpdatePostStatus()
+        //{
+        //    _postService.RunUpdatePostStatus();
+        //    return Ok("Post status updated successfully");
+        //}
+
 
         //Add Post
         [HttpPost("[action]")]
@@ -100,8 +121,24 @@ namespace ToShareApı.Controllers
         }
 
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> SearchPostsByLetter(string letter)
+        {
+            DateTime currentTime = DateTime.Now;
+
+            var matchingPosts = await _ApiDbContext.Posts
+                .Where(x => x.EndTime > currentTime)
+                .ToListAsync();
+            matchingPosts = matchingPosts
+                .Where(x => x.Name.Contains(letter, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return Ok(matchingPosts);
+        }
+
+
         [HttpPost("[action]")]
-        public async Task<IActionResult> ApplyPost(int postId, int userId)
+        public async Task<IActionResult> ApplyPost(int userId, int postId)
         {
             try
             {
