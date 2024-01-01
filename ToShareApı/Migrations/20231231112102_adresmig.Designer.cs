@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToShareApı.Data;
 
@@ -11,9 +12,11 @@ using ToShareApı.Data;
 namespace ToShareApı.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231231112102_adresmig")]
+    partial class adresmig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,15 +200,13 @@ namespace ToShareApı.Migrations
 
             modelBuilder.Entity("ToShareApı.Models.Apply", b =>
                 {
-                    b.HasOne("ToShareApı.Models.Post", "Post")
+                    b.HasOne("ToShareApı.Models.Post", null)
                         .WithMany("Applies")
                         .HasForeignKey("PostId");
 
                     b.HasOne("ToShareApı.Models.User", null)
                         .WithMany("Applies")
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("ToShareApı.Models.Product", b =>
