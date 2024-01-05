@@ -222,7 +222,26 @@ namespace ToShareApı.Controllers
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<List<Post>> GetUserApprovedPosts(int userId)
+        {
+            try
+            {
+                // Kullanıcının başvurduğu postları getir
+                var userAppliedPosts = await _ApiDbContext.Apply
+                    .Where(a => a.UserId == userId && a.IsAproved == true)
+                    .Select(a => a.Post)
+                    .ToListAsync();
 
+                return userAppliedPosts;
+            }
+            catch (Exception ex)
+            {
+                // Hata durumunda uygun bir cevap döndür
+                Console.WriteLine($"Başvurulan postları getirirken bir hata oluştu: {ex.Message}");
+                throw;
+            }
+        }
     }
 }
 
