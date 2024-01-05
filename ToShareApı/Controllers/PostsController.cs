@@ -154,7 +154,7 @@ namespace ToShareApı.Controllers
                 .Where(x => x.EndTime > currentTime)
                 .ToListAsync();
             matchingPosts = matchingPosts
-                .Where(x => x.Name.Contains(letter, StringComparison.OrdinalIgnoreCase))
+                .Where(x => x.Adres != null && x.Adres.Contains(letter, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             return Ok(matchingPosts);
