@@ -55,6 +55,16 @@ namespace ToShareApı.Controllers
             return Ok(new List<User> { newUser });
         }
 
+        //Get user by ıd
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetUsersByUserId(string useremail)
+        {
+            var users = await _ApiDbContext.Users.Where(x => x.UserEmail == useremail).ToListAsync();
+            var a = users.FirstOrDefault();
+            return Ok(a);
+        }
+
+
 
         //Login
         [HttpGet("[action]")]

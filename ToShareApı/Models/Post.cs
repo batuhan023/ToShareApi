@@ -1,4 +1,5 @@
-﻿namespace ToShareApı.Models
+﻿
+namespace ToShareApı.Models
 {
     public class Post
     {

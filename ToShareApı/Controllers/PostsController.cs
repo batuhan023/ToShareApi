@@ -64,7 +64,31 @@ namespace ToShareApı.Controllers
             return Ok(newPost);
         }
 
-            //List by UserId
+
+        //Add Post son deneme
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddNewPost(int userId, int categoryId, string name, string adress, int count
+            , string description, string image, DateTime endtime)
+        {
+            var newPost = new Post
+            {
+                UserId = userId,
+                CategoryId = categoryId,
+                Name = name,
+                Adres = adress,
+                Count = count,
+                Description = description,
+                Image = image,
+                EndTime = endtime,
+                StartTime = DateTime.Now
+            };
+            _ApiDbContext.Posts.Add(newPost);
+            await _ApiDbContext.SaveChangesAsync();
+            return Ok(newPost);
+        }
+
+
+        //List by UserId
         [HttpGet("[action]")]
         public async Task<IActionResult> GetPostsByUserId(int userId)
         {
