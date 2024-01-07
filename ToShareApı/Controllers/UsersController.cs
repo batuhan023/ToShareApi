@@ -18,31 +18,30 @@ namespace ToShareApı.Controllers
 
         //Register
         [HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody] User userModel)
+        public async Task<IActionResult> Register(string username,string usersurnema,string email, string password, string phone,
+            string photo, double salary)
         {
-            // Model validation
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+          
 
             // Check if the email is already registered
-            if (_ApiDbContext.Users.Any(x => x.UserEmail == userModel.UserEmail))
+            if (_ApiDbContext.Users.Any(x => x.UserEmail == email))
             {
                 return BadRequest("Email is already registered.");
             }
 
-            // Hash the password (you should never store passwords in plain text)
-            //string hashedPassword = HashPassword(userModel.UserPassword);
+            // Hash the password
+            //string hashedPassword = HashPassword(password);
 
             // Create a new user object
             var newUser = new User
             {
-                UserName = userModel.UserName,
-                UserSurname = userModel.UserSurname,
-                UserEmail = userModel.UserEmail,
-                UserPassword = userModel.UserPassword,
-                UserPhone = userModel.UserPhone,
+                UserName = username,
+                UserSurname = usersurnema,
+                UserEmail = email,
+                UserPassword = password,
+                UserPhone = phone,
+                ProfilePhoto = photo,
+                Salary = salary,
                 //BirthDate = userModel.BirthDate,
 
             };
@@ -52,7 +51,7 @@ namespace ToShareApı.Controllers
             await _ApiDbContext.SaveChangesAsync();
 
 
-            return Ok(new List<User> { newUser });
+            return Ok(newUser);
         }
 
         //Get user by ıd
