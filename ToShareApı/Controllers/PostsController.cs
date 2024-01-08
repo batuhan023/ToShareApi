@@ -208,7 +208,7 @@ namespace ToShareApı.Controllers
             {
                 // Kullanıcının başvurduğu postları getir
                 var userAppliedPosts = await _ApiDbContext.Apply
-                    .Where(a => a.UserId == userId)
+                    .Where(a => a.UserId == userId && a.IsAproved == false)
                     .Select(a => a.Post)
                     .ToListAsync();
 

@@ -9,5 +9,6 @@
         public bool? IsActive { get; set; }
         public bool? IsAproved { get; set; }
         public Post? Post { get; set; }
+        public User? User { get; set; }
     }
 }
