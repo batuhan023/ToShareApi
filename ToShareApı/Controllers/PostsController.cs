@@ -101,14 +101,16 @@ namespace ToShareApı.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetPostsByCategoryId(int categoryId)
         {
-            var posts = await _ApiDbContext.Posts.Where(x => x.CategoryId == categoryId).ToListAsync();
+            DateTime currenttime = DateTime.Now;
+            var posts = await _ApiDbContext.Posts.Where(x => x.CategoryId == categoryId && x.EndTime > currenttime).ToListAsync();
             return Ok(posts);
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetPostsByPostId(int postId)
         {
-            var posts = await _ApiDbContext.Posts.FirstOrDefaultAsync(x => x.Id == postId);
+
+            var posts = await _ApiDbContext.Posts.Include(p => p.User).FirstOrDefaultAsync(x => x.Id == postId);
             return Ok(posts);
         }
 
