@@ -63,7 +63,7 @@ namespace ToShareApı.Service
 
             lock (_lockObject)
             {
-                using (var scope = _serviceProvider.CreateScope())
+                using ( var scope = _serviceProvider.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
 

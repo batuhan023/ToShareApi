@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using ToShareApı.Data;
 using ToShareApı.Models;
 using ToShareApı.Service;
@@ -191,7 +193,16 @@ namespace ToShareApı.Controllers
                     await _ApiDbContext.SaveChangesAsync();
                 }
 
-                return Ok(apply);
+                //return Ok(apply);
+
+                var jsonOptions = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    MaxDepth = 64 // İsteğe bağlı: Derinlik sınırlarını artırabilirsiniz
+                };
+
+                return Ok(JsonSerializer.Serialize(apply, jsonOptions));
+
             }
             catch (Exception ex)
             {
